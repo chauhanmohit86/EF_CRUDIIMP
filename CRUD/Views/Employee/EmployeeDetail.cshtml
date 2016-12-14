@@ -1,0 +1,75 @@
+﻿@model CRUD.Models.EmployeeVM
+<h2>Edit Employee Details</h2>
+
+<div id="EmployeeDetailDiv">
+    <label>
+        Employee Id: 
+    </label>
+    <label id="EmpId">@Model.EmpId</label>
+    <br />
+    <br />
+    <label for="Name">
+        Name:
+    </label>
+    <input id="Name" type="text" value="@Model.Name" /><br />
+    <br />
+    <label for="Sal">
+        Salary:
+    </label>
+    <input id="Sal" maxlength="8" type="text" value="@Model.Salary" /><span id="errmsg" style="color: red; display: none">Digits Only</span><br />
+    <br />
+    <label for="ddlDepartment">
+        Department:
+    </label>
+    <select id="ddlDepartment">
+        <option value="0">Select</option>
+    </select><br /><br />
+
+    <button id="Submit" class="btn btn-info">Submit</button>
+
+    @Html.ActionLink("Cancel", "GetEmployees", null, new { @class = "btn btn-warning" })
+
+</div>
+
+<script type="text/javascript">
+    var depId = @Model.DepartmentId;
+    $(document).ready(function () {
+        $("#Sal").keypress(function (e) {
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                $("#errmsg").show().fadeOut("slow");
+                return false;
+            }
+        });
+
+        $.ajax({ url: "/Department/LoadDepartments", type: 'get' }).then(function (data) {
+            console.log(data);
+            if (data.length > 0) {
+                $.each(data, function (i, node) {
+                    console.log(node);
+                    if (node.Id == depId) {
+                        $('#ddlDepartment').append('<option value="' + node.Id + '" selected>' + node.Name + '</option>');
+                    }else{
+                        $('#ddlDepartment').append('<option value="' + node.Id + '">' + node.Name + '</option>');
+                    }
+                });
+            }
+
+        });
+        $('#Submit').on('click', function () {
+            $.ajax({
+                url: "/Employee/SetEmployee",
+                type: "post",
+                data: {
+                    EmpId: $('#EmpId').text(),
+                    Name: $('#Name').val(),
+                    Salary: $('#Sal').val(),
+                    DepartmentId: $('#ddlDepartment').val()
+                }
+            }).then(function () {
+                alert('Employee saved successfully');
+                location.href = "/Employee/GetEmployees";
+            });
+        });
+    });
+
+</script>

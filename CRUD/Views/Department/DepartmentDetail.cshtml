@@ -1,0 +1,41 @@
+﻿@model CRUD.Models.DepartmentVM
+<h2>Edit Department Details</h2>
+
+<div id="DepartmentDetailDiv">
+    <label for="DepartmentId" style="display: inline">
+        Department Id:
+    </label>
+    <label id="DepartmentId">@Model.Id</label>
+    <br />
+    <br />
+    <label for="Name">
+        Name:
+    </label>
+    <input id="Name" type="text" value="@Model.Name" /><br />
+    <br />
+
+    <button class="btn btn-info" type="button" id="Submit">Submit</button>
+
+    @Html.ActionLink("Cancel", "GetDepartments", null, new { @class = "btn btn-default" })
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#Submit').on('click', function () {
+            $.ajax({
+                url: "/Department/SetDepartment",
+                type: "post",
+                data: {
+                    Id: $('#DepartmentId').text(),
+                    Name: $('#Name').val()
+                }
+            }).then(function () {
+                alert('Department saved successfully');
+                location.href = "/Department/GetDepartments";
+            });
+        });
+    });
+
+</script>

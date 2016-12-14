@@ -1,0 +1,89 @@
+﻿<div>
+    <h2>Welcome! This application is build in MVC4 which demonstrates Entity Framework features.</h2>
+
+    @Html.ActionLink("Department", "GetDepartments", "Department", null, new { @class = "btn btn-info" })
+
+    @Html.ActionLink("Employees", "GetEmployees", "Employee", null, new { @class = "btn btn-info" })
+
+    @Html.ActionLink("Change Tracking", "TrackChanges", "Home", null, new { @class = "btn btn-info" })
+
+    @Html.ActionLink("Persistence", "TestPersistence", "Home", null, new { @class = "btn btn-info" })
+
+    @Html.ActionLink("Stored Procedure", "CallStoredProcedure", "Home", null, new { @class = "btn btn-info" })
+
+    <button id="CallFunction" class="btn btn-info">Function</button>
+    <button id="RawSql" class="btn btn-info">Raw Sql</button>
+    <br />
+
+    <h2>EF 6.0 Features...</h2>
+
+    @Html.ActionLink("Async Query", "AsyncQuery", "Home", null, new { @class = "btn btn-info" })
+    @Html.ActionLink("DB logging", "DatabaseLog", "Home", null, new { @class = "btn btn-info" })
+    @Html.ActionLink("Transaction", "ControlTransaction", "Home", null, new { @class = "btn btn-info" })
+    @Html.ActionLink("AddRange", "AddRange", "Home", null, new { @class = "btn btn-info" })
+
+    <button id="UnitTesing" class="btn btn-info">Unit Tesing</button>
+    <button id="CommandInterception" class="btn btn-info">Command Interception</button>
+
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+
+                <h4 class="modal-title" id="myModalLabel">Employee - Department
+                </h4>
+            </div>
+
+            <div class="modal-body" id="modalBody">
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+
+</div>
+<!-- /.modal -->
+
+<script>
+
+    $(document).ready(function () {
+        $('#CallFunction').click(function () {
+            $.get('/Home/CallFunction').then(function (data) {
+                loadData(data);
+            });
+        });
+
+        $('#RawSql').click(function () {
+            $.get('/Home/CallRawSql').then(function (data) {
+                loadData(data);
+            });
+        });
+    });
+
+    function loadData(data) {
+        console.log(data);
+        $('#modalBody').empty();
+        if (data.length > 0) {
+            $.each(data, function (i, node) {
+                $('#modalBody').append(node.EmpName + ' - ' + (node.DeptName || 'NA') + '<br/>');
+            });
+        }
+        $('#myModal').modal('show');
+    }
+
+</script>

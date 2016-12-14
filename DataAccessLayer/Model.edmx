@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DemoModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="DemoModelStoreContainer">
+          <EntitySet Name="Department" EntityType="DemoModel.Store.Department" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Employee" EntityType="DemoModel.Store.Employee" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="EmployeeDepartment" EntityType="DemoModel.Store.EmployeeDepartment" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_EmployeeDepartment_Department" Association="DemoModel.Store.FK_EmployeeDepartment_Department">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="EmployeeDepartment" EntitySet="EmployeeDepartment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeeDepartment_Employee" Association="DemoModel.Store.FK_EmployeeDepartment_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="EmployeeDepartment" EntitySet="EmployeeDepartment" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Salary" Type="decimal" Nullable="false" Scale="2" />
+        </EntityType>
+        <EntityType Name="EmployeeDepartment">
+          <Key>
+            <PropertyRef Name="SequenceNo" />
+          </Key>
+          <Property Name="SequenceNo" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="DepartmentId" Type="bigint" Nullable="false" />
+          <Property Name="EmployeeId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_EmployeeDepartment_Department">
+          <End Role="Department" Type="DemoModel.Store.Department" Multiplicity="1" />
+          <End Role="EmployeeDepartment" Type="DemoModel.Store.EmployeeDepartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EmployeeDepartment">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeeDepartment_Employee">
+          <End Role="Employee" Type="DemoModel.Store.Employee" Multiplicity="1" />
+          <End Role="EmployeeDepartment" Type="DemoModel.Store.EmployeeDepartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EmployeeDepartment">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AddEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="Salary" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="DepartmentEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="EmpName" Type="varchar" Nullable="false" MaxLength="50" />
+                <Property Name="DeptName" Type="varchar" MaxLength="50" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DemoModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="DemoEntities1" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Departments" EntityType="DemoModel.Department" />
+          <EntitySet Name="Employees" EntityType="DemoModel.Employee" />
+          <EntitySet Name="EmployeeDepartments" EntityType="DemoModel.EmployeeDepartment" />
+          <AssociationSet Name="FK_EmployeeDepartment_Department" Association="DemoModel.FK_EmployeeDepartment_Department">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="EmployeeDepartment" EntitySet="EmployeeDepartments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeeDepartment_Employee" Association="DemoModel.FK_EmployeeDepartment_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="EmployeeDepartment" EntitySet="EmployeeDepartments" />
+          </AssociationSet>
+          <FunctionImport Name="AddEmployee">
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Salary" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="DepartmentEmployee" IsComposable="true" ReturnType="Collection(DemoModel.DepartmentEmployee_Result)" />
+        </EntityContainer>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="EmployeeDepartments" Relationship="DemoModel.FK_EmployeeDepartment_Department" FromRole="Department" ToRole="EmployeeDepartment" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Salary" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <NavigationProperty Name="EmployeeDepartments" Relationship="DemoModel.FK_EmployeeDepartment_Employee" FromRole="Employee" ToRole="EmployeeDepartment" />
+        </EntityType>
+        <EntityType Name="EmployeeDepartment">
+          <Key>
+            <PropertyRef Name="SequenceNo" />
+          </Key>
+          <Property Name="SequenceNo" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="DepartmentId" Type="Int64" Nullable="false" />
+          <Property Name="EmployeeId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Department" Relationship="DemoModel.FK_EmployeeDepartment_Department" FromRole="EmployeeDepartment" ToRole="Department" />
+          <NavigationProperty Name="Employee" Relationship="DemoModel.FK_EmployeeDepartment_Employee" FromRole="EmployeeDepartment" ToRole="Employee" />
+        </EntityType>
+        <Association Name="FK_EmployeeDepartment_Department">
+          <End Type="DemoModel.Department" Role="Department" Multiplicity="1" />
+          <End Type="DemoModel.EmployeeDepartment" Role="EmployeeDepartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EmployeeDepartment">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeeDepartment_Employee">
+          <End Type="DemoModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="DemoModel.EmployeeDepartment" Role="EmployeeDepartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EmployeeDepartment">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="DepartmentEmployee_Result">
+          <Property Type="String" Name="EmpName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="DeptName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DemoModelStoreContainer" CdmEntityContainer="DemoEntities1">
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="DemoModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="DemoModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Salary" ColumnName="Salary" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeDepartments">
+            <EntityTypeMapping TypeName="DemoModel.EmployeeDepartment">
+              <MappingFragment StoreEntitySet="EmployeeDepartment">
+                <ScalarProperty Name="SequenceNo" ColumnName="SequenceNo" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddEmployee" FunctionName="DemoModel.Store.AddEmployee" />
+          <FunctionImportMapping FunctionImportName="DepartmentEmployee" FunctionName="DemoModel.Store.DepartmentEmployee">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DemoModel.DepartmentEmployee_Result">
+                <ScalarProperty Name="EmpName" ColumnName="EmpName" />
+                <ScalarProperty Name="DeptName" ColumnName="DeptName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

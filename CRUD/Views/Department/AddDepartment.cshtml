@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "AddDepartment";
+}
+
+<h2>Add Department</h2>
+
+<div id="AddDepartmentDetailDiv">
+    <label for="Name">
+        Name:
+    </label>
+    <input id="Name" type="text" /><br />
+    <br/>
+
+    <button id="Submit" class="btn btn-info">Submit</button>
+    @Html.ActionLink("Cancel", "GetDepartments", null, new { @class = "btn btn-default" })
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#Submit').on('click', function () {
+            $.ajax({
+                url: "/Department/AddDepartment",
+                type: "post",
+                data: {
+                    Name: $('#Name').val(),
+                }
+            }).then(function () {
+                alert('Department saved successfully');
+                location.href = "/Department/GetDepartments";
+            });
+        });
+    });
+
+</script>

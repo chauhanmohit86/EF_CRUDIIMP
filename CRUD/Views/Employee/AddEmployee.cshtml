@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "AddEmployee";
+}
+
+<h2>AddEmployee</h2>
+
+<div id="AddEmployeeDetailDiv">
+    <label for="Name">
+        Name:
+    </label>
+    <input id="Name" type="text" /><br />
+    <br />
+    <label for="Sal">
+        Salary:
+    </label>
+    <input id="Sal" maxlength="8" type="text" /><span id="errmsg" style="color: red; display: none">Digits Only</span><br />
+    <br />
+    <label for="ddlDepartment">
+        Department:
+    </label>
+    <select id="ddlDepartment">
+        <option value="0">Select</option>
+    </select><br />
+    <br />
+    <button value="Submit" id="Submit" class="btn btn-info">Submit</button>
+    @Html.ActionLink("Cancel", "GetEmployees", null, new { @class = "btn btn-default" })
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#Sal").keypress(function (e) {
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                $("#errmsg").show().fadeOut("slow");
+                return false;
+            }
+        });
+
+        $.ajax({ url: "/Department/LoadDepartments", type: 'get' }).then(function (data) {
+            console.log(data);
+            if (data.length > 0) {
+                $.each(data, function (i, node) {
+                    console.log(node);
+                    $('#ddlDepartment').append('<option value="' + node.Id + '">' + node.Name + '</option>');
+                });
+            }
+
+        });
+        $('#Submit').on('click', function () {
+            $.ajax({
+                url: "/Employee/AddEmployee",
+                type: "post",
+                data: {
+                    EmpId: 0,
+                    Name: $('#Name').val(),
+                    Salary: $('#Sal').val(),
+                    DepartmentId: $('#ddlDepartment').val()
+                }
+            }).then(function () {
+                alert('Employee saved successfully');
+                location.href = "/Employee/GetEmployees";
+            });
+        });
+    });
+
+</script>
